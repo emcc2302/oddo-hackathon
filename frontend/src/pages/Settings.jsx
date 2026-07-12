@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const ROLE_LABELS = {
   fleet_manager: 'Fleet Manager',
@@ -52,6 +54,15 @@ const MODULES = [
   },
 ];
 
+const DEFAULT_GENERAL = {
+  depotName: 'Kolkata Depot',
+  currency: 'INR (₹)',
+  distanceUnit: 'Kilometers',
+};
+
+const CURRENCIES = ['INR (₹)', 'USD ($)', 'EUR (€)', 'GBP (£)'];
+const DISTANCE_UNITS = ['Kilometers', 'Miles'];
+
 function Cell({ can }) {
   return can ? (
     <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-signal-transit/15 text-signal-transit text-xs font-bold">✓</span>
@@ -62,6 +73,48 @@ function Cell({ can }) {
 
 export default function Settings() {
   const { user } = useAuth();
+  const toast = useToast();
+  const isFleetManager = user?.role === 'fleet_manager';
+
+  const [general, setGeneral] = useState(() => {
+    try {
+      const stored = localStorage.getItem('transitops_general_settings');
+      return stored ? { ...DEFAULT_GENERAL, ...JSON.parse(stored) } : DEFAULT_GENERAL;
+    } catch {
+      return DEFAULT_GENERAL;
+    }
+  });
+  const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
+
+  const validate = () => {
+    const errs = {};
+    if (!general.depotName?.trim()) errs.depotName = 'Depot name is required.';
+    else if (general.depotName.trim().length < 2) errs.depotName = 'Depot name is too short.';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (!isFleetManager) {
+      toast.error('Only Fleet Managers can change depot settings.');
+      return;
+    }
+    if (!validate()) {
+      toast.error('Fix the highlighted fields before saving.');
+      return;
+    }
+    setSaving(true);
+    try {
+      localStorage.setItem('transitops_general_settings', JSON.stringify(general));
+      toast.success('Depot settings saved.');
+    } catch {
+      toast.error('Could not save settings on this device.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <Layout title="Settings & RBAC">
@@ -91,7 +144,53 @@ export default function Settings() {
           </p>
         </div>
 
-        <div className="panel p-5 lg:col-span-2 overflow-x-auto">
+        <div className="panel p-5 lg:col-span-2">
+          <div className="board-eyebrow mb-1">General</div>
+          <p className="text-xs text-ink/50 dark:text-paper/50 mb-4">
+            Depot-wide display preferences. Stored on this device{isFleetManager ? '' : ' — view only for your role'}.
+          </p>
+          <form onSubmit={handleSave} className="space-y-3 max-w-sm" noValidate>
+            <div>
+              <label className="board-eyebrow block mb-1.5">Depot Name</label>
+              <input
+                disabled={!isFleetManager}
+                className={`input-field disabled:opacity-60 ${errors.depotName ? '!border-signal-alert' : ''}`}
+                value={general.depotName}
+                onChange={(e) => setGeneral({ ...general, depotName: e.target.value })}
+              />
+              {errors.depotName && <p className="text-xs text-signal-alert mt-1">{errors.depotName}</p>}
+            </div>
+            <div>
+              <label className="board-eyebrow block mb-1.5">Currency</label>
+              <select
+                disabled={!isFleetManager}
+                className="input-field disabled:opacity-60"
+                value={general.currency}
+                onChange={(e) => setGeneral({ ...general, currency: e.target.value })}
+              >
+                {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="board-eyebrow block mb-1.5">Distance Unit</label>
+              <select
+                disabled={!isFleetManager}
+                className="input-field disabled:opacity-60"
+                value={general.distanceUnit}
+                onChange={(e) => setGeneral({ ...general, distanceUnit: e.target.value })}
+              >
+                {DISTANCE_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+              </select>
+            </div>
+            {isFleetManager && (
+              <button type="submit" disabled={saving} className="btn-primary">
+                {saving ? 'Saving…' : 'Save changes'}
+              </button>
+            )}
+          </form>
+        </div>
+
+        <div className="panel p-5 lg:col-span-3 overflow-x-auto">
           <div className="board-eyebrow mb-1">Role-Based Access Control</div>
           <p className="text-xs text-ink/50 dark:text-paper/50 mb-4">
             What each role can view and manage. These permissions are enforced by the API on every request — this
