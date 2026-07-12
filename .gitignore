@@ -31,7 +31,7 @@ uploads/
 temp/
 tmp/
 
-*.sql
+
 *.dump
 
 .vscode/
