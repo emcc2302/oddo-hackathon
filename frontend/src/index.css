@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-ink: #14181F;
+  --color-ink-raised: #1B212B;
+  --color-ink-line: #2A3140;
+
+  --color-paper: #F5F3EE;
+  --color-paper-raised: #FFFFFF;
+  --color-paper-line: #DEDACF;
+
+  --color-signal-transit: #1F9D77;
+  --color-signal-amber: #E39B3A;
+  --color-signal-route: #3D6FE0;
+  --color-signal-alert: #D14B4B;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --tracking-board: 0.14em;
+
+  --shadow-panel: 0 1px 0 0 rgba(0, 0, 0, 0.04),
+    0 8px 24px -12px rgba(20, 24, 31, 0.18);
+
+  --shadow-panel-dark: 0 1px 0 0 rgba(255, 255, 255, 0.02),
+    0 8px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+@layer base {
+  html {
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    @apply bg-paper text-ink transition-colors duration-200;
+  }
+
+  .dark body {
+    @apply bg-ink text-paper;
+  }
+
+  ::selection {
+    background-color: #1f9d7733;
+  }
+
+  :focus-visible {
+    outline: 2px solid #1F9D77;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .board-eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-board text-ink/50 dark:text-paper/45;
+  }
+
+  .panel {
+    @apply bg-paper-raised dark:bg-ink-raised border border-paper-line dark:border-ink-line rounded-lg shadow-panel dark:shadow-panel-dark;
+  }
+
+  .flip-digit {
+    @apply font-mono text-3xl md:text-4xl font-semibold tabular-nums;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium font-mono uppercase tracking-wide border;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-signal-transit text-white px-4 py-2 text-sm font-medium hover:bg-[#188563] transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-paper-line dark:border-ink-line bg-transparent px-4 py-2 text-sm font-medium hover:bg-ink/5 dark:hover:bg-paper/5 transition-colors;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-signal-alert/40 text-signal-alert px-3 py-1.5 text-xs font-medium hover:bg-signal-alert/10 transition-colors;
+  }
+
+  .input-field {
+    @apply w-full rounded-md border border-paper-line dark:border-ink-line bg-paper dark:bg-ink px-3 py-2 text-sm placeholder:text-ink/40 dark:placeholder:text-paper/35 focus:border-signal-transit outline-none transition-colors;
+  }
+
+  .manifest-table th {
+    @apply text-left font-mono text-[11px] uppercase tracking-wide text-ink/50 dark:text-paper/45 font-medium px-4 py-2.5 border-b border-paper-line dark:border-ink-line;
+  }
+
+  .manifest-table td {
+    @apply px-4 py-3 text-sm border-b border-paper-line/70 dark:border-ink-line/70;
+  }
+
+  .manifest-table tbody tr:hover {
+    @apply bg-signal-transit/[0.04];
+  }
+}
