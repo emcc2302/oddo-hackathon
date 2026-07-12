@@ -128,8 +128,8 @@ export default function FuelExpenses() {
           <table className="w-full manifest-table">
             <thead><tr><th>Vehicle</th><th>Date</th><th>Liters</th><th>Cost</th></tr></thead>
             <tbody>
-              {loading ? <tr><td colSpan={4} className="text-center py-8 text-ink/40">Loading fuel logs…</td></tr>
-                : fuelLogs.length === 0 ? <tr><td colSpan={4} className="text-center py-8 text-ink/40">No fuel logs recorded yet.</td></tr>
+              {loading ? <tr><td colSpan={4} className="text-center py-8 text-ink/40 dark:text-paper/45">Loading fuel logs…</td></tr>
+                : fuelLogs.length === 0 ? <tr><td colSpan={4} className="text-center py-8 text-ink/40 dark:text-paper/45">No fuel logs recorded yet.</td></tr>
                   : fuelLogs.map((f) => (
                     <tr key={f.id}>
                       <td className="font-mono">{f.registration_number}</td>
