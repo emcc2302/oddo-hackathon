@@ -11,6 +11,8 @@ import Trips from './pages/Trips';
 import Maintenance from './pages/Maintenance';
 import FuelExpenses from './pages/FuelExpenses';
 import Reports from './pages/Reports';
+import FuelExpenses from './pages/FuelExpenses';
+import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
 function App() {
