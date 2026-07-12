@@ -7,18 +7,46 @@ router.use(authenticate);
 
 router.get('/', async (req, res) => {
   const { status, region, dispatchable } = req.query;
+
   const clauses = [];
   const params = [];
 
-  if (status) { params.push(status); clauses.push(`status = $${params.length}`); }
-  if (region) { params.push(region); clauses.push(`region = $${params.length}`); }
-  if (dispatchable === 'true') {
-    clauses.push(`status = 'Available' AND license_expiry >= CURRENT_DATE`);
+  if (region) {
+    params.push(region);
+    clauses.push(`region = $${params.length}`);
   }
 
   const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
-  const { rows } = await db.query(`SELECT * FROM drivers ${where} ORDER BY id DESC`, params);
-  res.json(rows);
+
+  const { rows } = await db.query(
+    `SELECT * FROM drivers ${where} ORDER BY id DESC`,
+    params
+  );
+
+  const drivers = rows
+    .map((driver) => {
+      let computedStatus = 'Available';
+
+      if (new Date(driver.license_expiry) < new Date()) {
+        computedStatus = 'Off Duty';
+      }
+
+      return {
+        ...driver,
+        status: computedStatus,
+      };
+    })
+    .filter((driver) => {
+      if (status && driver.status !== status) return false;
+
+      if (dispatchable === 'true') {
+        return driver.status === 'Available';
+      }
+
+      return true;
+    });
+
+  res.json(drivers);
 });
 
 router.get('/:id', async (req, res) => {
