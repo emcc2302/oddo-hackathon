@@ -142,9 +142,9 @@ export default function Vehicles() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={8} className="text-center py-8 text-ink/40">Loading fleet…</td></tr>
+              <tr><td colSpan={8} className="text-center py-8 text-ink/40 dark:text-paper/45">Loading fleet…</td></tr>
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={8} className="text-center py-8 text-ink/40">No vehicles match these filters.</td></tr>
+                <tr><td colSpan={8} className="text-center py-8 text-ink/40 dark:text-paper/45">No vehicles match these filters.</td></tr>
             ) : filtered.map((v) => (
               <tr key={v.id}>
                 <td className="font-mono">{v.registration_number}</td>

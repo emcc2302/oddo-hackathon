@@ -104,9 +104,9 @@ export default function Maintenance() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} className="text-center py-8 text-ink/40">Loading records…</td></tr>
+              <tr><td colSpan={6} className="text-center py-8 text-ink/40 dark:text-paper/45">Loading records…</td></tr>
             ) : records.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-8 text-ink/40">No maintenance records yet.</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-ink/40 dark:text-paper/45">No maintenance records yet.</td></tr>
             ) : records.map((r) => (
               <tr key={r.id}>
                 <td className="font-mono">{r.registration_number}</td>

@@ -169,9 +169,9 @@ export default function Trips() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={7} className="text-center py-8 text-ink/40">Loading trip log…</td></tr>
+              <tr><td colSpan={7} className="text-center py-8 text-ink/40 dark:text-paper/45">Loading trip log…</td></tr>
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-8 text-ink/40">No trips match this filter.</td></tr>
+                <tr><td colSpan={7} className="text-center py-8 text-ink/40 dark:text-paper/45">No trips match this filter.</td></tr>
             ) : filtered.map((t) => (
               <tr key={t.id}>
                 <td>

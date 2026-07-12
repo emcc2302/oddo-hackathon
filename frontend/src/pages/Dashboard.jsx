@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    client.get('/dashboard/filters').then((res) => setFilters(res.data)).catch(() => {});
+    client.get('/dashboard/filters').then((res) => setFilters(res.data)).catch(() => { });
   }, []);
 
   useEffect(() => {

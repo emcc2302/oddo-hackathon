@@ -138,9 +138,9 @@ export default function Drivers() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={7} className="text-center py-8 text-ink/40">Loading roster…</td></tr>
+              <tr><td colSpan={7} className="text-center py-8 text-ink/40 dark:text-paper/45">Loading roster…</td></tr>
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-8 text-ink/40">No drivers match this search.</td></tr>
+              <tr><td colSpan={7} className="text-center py-8 text-ink/40 dark:text-paper/45">No drivers match this search.</td></tr>
             ) : filtered.map((d) => (
               <tr key={d.id}>
                 <td className="font-medium">{d.name}</td>
