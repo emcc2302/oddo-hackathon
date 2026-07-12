@@ -7,108 +7,32 @@ import client from '../api/client';
 const VEHICLE_COLORS = { Available: '#1F9D77', 'On Trip': '#3D6FE0', 'In Shop': '#E39B3A', Retired: '#8A8578' };
 
 export default function Dashboard() {
-  const [kpis, setKpis] = useState({
-    "activeVehicles": 18,
-    "availableVehicles": 11,
-    "vehiclesInMaintenance": 3,
-    "retiredVehicles": 2,
-    "activeTrips": 9,
-    "pendingTrips": 4,
-    "completedTrips": 120,
-    "cancelledTrips": 7,
-    "driversOnDuty": 9,
-    "driversAvailable": 12,
-    "driversSuspended": 1,
-    "fleetUtilization": 45.0
-  });
+  const [kpis, setKpis] = useState(null);
   const [filters, setFilters] = useState({ types: [], regions: [] });
-  const [type, setType] = useState([
-    "Truck",
-    "Mini Truck",
-    "Trailer",
-    "Container",
-    "Van"
-  ]);
-  const [region, setRegion] = useState([
-    "North",
-    "South",
-    "East",
-    "West",
-    "Central"
-  ]);
-  const [vehicles, setVehicles] = useState([
-    {
-      "id": 1,
-      "vehicleNumber": "WB12AB1234",
-      "type": "Truck",
-      "status": "Available",
-      "region": "East"
-    },
-    {
-      "id": 2,
-      "vehicleNumber": "WB12AB5678",
-      "type": "Truck",
-      "status": "On Trip",
-      "region": "East"
-    },
-    {
-      "id": 3,
-      "vehicleNumber": "DL10CD1111",
-      "type": "Trailer",
-      "status": "In Shop",
-      "region": "North"
-    },
-    {
-      "id": 4,
-      "vehicleNumber": "MH20EF2222",
-      "type": "Container",
-      "status": "Available",
-      "region": "West"
-    },
-    {
-      "id": 5,
-      "vehicleNumber": "KA05GH3333",
-      "type": "Mini Truck",
-      "status": "On Trip",
-      "region": "South"
-    },
-    {
-      "id": 6,
-      "vehicleNumber": "TN09JK4444",
-      "type": "Van",
-      "status": "Retired",
-      "region": "South"
-    },
-    {
-      "id": 7,
-      "vehicleNumber": "WB22LM5555",
-      "type": "Truck",
-      "status": "Available",
-      "region": "East"
-    },
-    {
-      "id": 8,
-      "vehicleNumber": "RJ14NO6666",
-      "type": "Trailer",
-      "status": "On Trip",
-      "region": "North"
-    },
-    {
-      "id": 9,
-      "vehicleNumber": "GJ18PQ7777",
-      "type": "Container",
-      "status": "Available",
-      "region": "West"
-    },
-    {
-      "id": 10,
-      "vehicleNumber": "UP32RS8888",
-      "type": "Truck",
-      "status": "In Shop",
-      "region": "Central"
-    }
-  ]);
-  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState('');
+  const [region, setRegion] = useState('');
+  const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    client.get('/dashboard/filters').then((res) => setFilters(res.data)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    const params = {};
+    if (type) params.type = type;
+    if (region) params.region = region;
+    Promise.all([
+      client.get('/dashboard/kpis', { params }),
+      client.get('/vehicles', { params }),
+    ])
+      .then(([kpiRes, vehicleRes]) => {
+        setKpis(kpiRes.data);
+        setVehicles(vehicleRes.data);
+      })
+      .finally(() => setLoading(false));
+  }, [type, region]);
 
   const vehicleStatusData = vehicles.reduce((acc, v) => {
     const found = acc.find((a) => a.name === v.status);
