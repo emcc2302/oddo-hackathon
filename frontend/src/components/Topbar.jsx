@@ -14,7 +14,7 @@ export default function Topbar({ title, onMenuClick }) {
 
   return (
     <header className="sticky top-0 z-20 bg-paper/90 dark:bg-ink/90 backdrop-blur border-b border-paper-line dark:border-ink-line">
-      <div className="flex items-center justify-between px-4 md:px-8 py-3.5">
+      <div className="flex items-center justify-between px-4 md:px-8 py-4">
         <div className="flex items-center gap-3">
           <button
             className="md:hidden text-ink/60 dark:text-paper/60"

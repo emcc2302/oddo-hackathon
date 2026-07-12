@@ -8,6 +8,7 @@ const NAV = [
   { to: '/maintenance', label: 'Maintenance', code: 'MNT' },
   { to: '/fuel-expenses', label: 'Fuel &amp; Expenses', code: 'FUE', raw: 'Fuel & Expenses' },
   { to: '/reports', label: 'Reports', code: 'RPT' },
+  { to: '/settings', label: 'Settings & RBAC', code: 'SET' },
 ];
 
 export default function Sidebar({ open, onClose }) {
@@ -15,7 +16,7 @@ export default function Sidebar({ open, onClose }) {
     <>
       {open && <div className="fixed inset-0 bg-ink/40 z-30 md:hidden" onClick={onClose} />}
       <aside
-        className={`fixed md:sticky z-40 top-0 left-0 h-screen w-64 bg-paper-raised dark:bg-ink-raised border-r border-paper-line dark:border-ink-line flex flex-col transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        className={`fixed md:static z-40 top-0 left-0 h-full w-64 bg-paper-raised dark:bg-ink-raised border-r border-paper-line dark:border-ink-line flex flex-col transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
       >
         <div className="px-5 py-5 border-b border-paper-line dark:border-ink-line">
