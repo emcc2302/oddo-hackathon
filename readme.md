@@ -106,6 +106,17 @@ transitops/
         └── api/client.js
 ```
 
+## Project Screenshots
+<img width="1907" height="966" alt="image" src="https://github.com/user-attachments/assets/7efe9d8f-0838-4707-b0b3-bc4559f7ad63" />
+
+<img width="1918" height="917" alt="image" src="https://github.com/user-attachments/assets/5f7a2640-5555-4084-9c2e-b06ee3ed2323" />
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/f0351bab-69d4-4e27-8e8d-afe38c4bbe54" />
+<img width="1915" height="966" alt="image" src="https://github.com/user-attachments/assets/7bffb87b-63e5-470d-b26d-c4364c4c8584" />
+<img width="1917" height="953" alt="image" src="https://github.com/user-attachments/assets/664a6606-7860-46c6-a0ff-393d3d7d6fe1" />
+
+
+
+
 ## Access control (RBAC)
 
 Every write action is enforced server-side in `backend/src/middleware/auth.js` (`authorize(...roles)`), so a rejected request always gets a `403` even if the UI is bypassed. The frontend mirrors those same rules so users only see actions they're actually allowed to perform:
